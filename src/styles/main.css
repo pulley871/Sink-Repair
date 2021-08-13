@@ -32,6 +32,18 @@ h1,h2,h3,h4,h5,h6 {
 	width: 10em;
 	height: 4em;
 }
+.requestTable{
+	border: 1px dotted lightblue;
+	border-collapse: collapse;
+	width: 100%
+}
+.tableHeader{
+	background-color: rgb(96, 107, 131);
+	color: white
+}
+.requestTable tr:nth-child(even) {
+	background-color: #dddddd;
+}
 .completed {
-	background-color: rgb(83, 132, 10);
+	background-color: rgb(174, 203, 129) !important;
 }

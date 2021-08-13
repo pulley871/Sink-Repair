@@ -9,12 +9,13 @@ const mainContainer = document.querySelector("#container")
 export const Request = () =>{
     const getRequests = getRequest()
     const plumbers = getPlumbers()
-    let htmlString = ""
+    let htmlString = `<table class="requestTable"><tr class="tableHeader"><th>Description</th><th>Employee</th><th></th></tr>`
     const request = getRequests.map((request =>{
         if (request.completed === false){
             return `
-                <li>
-                    ${request.description}
+                <tr>
+                    <td>${request.description}</td>
+                    <td>
                     <select class="plumbers" id="plumbers">
                     <option value="">Choose</option>
                     ${
@@ -24,17 +25,20 @@ export const Request = () =>{
                             }).join("")
                     }
                     </select>
-                    <button class="request__delete"id="request--${request.id}">
-                        Delete
-                    </button>
-                </li>
+                    </td>
+                    <td>
+                    <button class="request__delete"id="request--${request.id}">Delete</button>
+                    </td>
+                </tr>
                 `
 
         }else{
-            return `<li class="completed">${request.description}</li>`
+            return `<tr class="completed"><td>${request.description}</td><td></td><td><button class="request__delete"id="request--${request.id}">Delete</button></td></tr>`
         }
     }));
+    
     htmlString += request.join("");
+    htmlString += "</table>"
     return htmlString
 }
 document.addEventListener("click",
