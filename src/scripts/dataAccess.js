@@ -1,43 +1,53 @@
-import { mainContainer } from "./main.js"
+import { SinkRepair } from "./SinkRepair.js"
 const applicationState = {
     requests: [],
     plumbers: [],
     completions: []
 
 }
+ const mainContainer = document.querySelector("#container")
 
 const API = "http://localhost:8088"
 //pull JSON database and convert it to JS to use in app
 export const fetchRequests = () => {
-    return fetch(`${API}/requests`)
-        .then(response => response.json())
-        .then(
-            (serviceRequests) => {
-                // Store the external state in application state
-                applicationState.requests = serviceRequests
-            }
-        )
+    const requestFetch = fetch("http://localhost:8088/requests")
+    const plumbersFetch = fetch("http://localhost:8088/plumbers")
+    const completionsFetch = fetch("http://localhost:8088/completions")
+    Promise.all([requestFetch, plumbersFetch, completionsFetch])
+    .then(values =>{
+        return Promise.all(values.map(r => r.json()));
+    }).then(([request,plumbers,completions])=>{
+        applicationState.requests = request
+        applicationState.plumbers = plumbers
+        applicationState.completions = completions
+        //made these console logs to help me see if the data was coming in
+        console.log(applicationState.request = request)
+        console.log(applicationState.plumbers = plumbers)
+        console.log(applicationState.completions = completions)
+    }).then(()=> mainContainer.innerHTML = SinkRepair())
+    
 }
-export const fetchPlumbers = () => {
-    return fetch(`${API}/plumbers`)
-        .then(response => response.json())
-        .then(
-            (plumbers) => {
-                // Store the external state in application state
-                applicationState.plumbers = plumbers
-            }
-        )
-}
-export const fetchCompletions = () => {
-    return fetch(`${API}/completions`)
-        .then(response => response.json())
-        .then(
-            (completions) => {
-                // Store the external state in application state
-                applicationState.completions = completions
-            }
-        )
-}
+
+    // export const fetchPlumbers = () => {
+        //     return fetch(`${API}/plumbers`)
+//         .then(response => response.json())
+//         .then(
+//             (plumbers) => {
+//                 // Store the external state in application state
+//                 applicationState.plumbers = plumbers
+//             }
+//         )
+// }
+// export const fetchCompletions = () => {
+//     return fetch(`${API}/completions`)
+//         .then(response => response.json())
+//         .then(
+//             (completions) => {
+//                 // Store the external state in application state
+//                 applicationState.completions = completions
+//             }
+//         )
+// }
 export const getRequest = () =>{
     const completedRequest = applicationState.requests.filter((request)=>{
         const completedJob = applicationState.completions.find((job)=> job.requestId === request.id)
